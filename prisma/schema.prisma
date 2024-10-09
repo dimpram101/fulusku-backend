@@ -65,16 +65,16 @@ model Transaction {
 enum PaymentStatus {
   PENDING
   REJECTED
+  ACCEPTED
   PAID
 }
 
 model Payment {
-  id             Int           @id @default(autoincrement())
-  account_number String
-  amount         Int
-  amount_paid    Int           @default(0)
-  status         PaymentStatus
-  due_date       DateTime
+  id          String        @id
+  amount      Int
+  amount_paid Int           @default(0)
+  status      PaymentStatus @default(PENDING)
+  due_date    DateTime
 
   created_at DateTime        @default(now())
   updated_at DateTime        @updatedAt
@@ -91,10 +91,10 @@ enum PaymentMemberRole {
 model PaymentMember {
   id         Int               @id @default(autoincrement())
   payment    Payment           @relation(fields: [payment_id], references: [id])
-  payment_id Int
+  payment_id String
   account    Account           @relation(fields: [account_id], references: [id])
   account_id String
-  status     PaymentStatus
+  status     PaymentStatus     @default(PENDING)
   amount     Int
   role       PaymentMemberRole
   created_at DateTime          @default(now())
