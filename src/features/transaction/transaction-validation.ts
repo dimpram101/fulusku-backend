@@ -4,6 +4,7 @@ export class TransactionValidation {
   static readonly TRANSFER: ZodType = z.object({
     from_account_id: z.string(),
     to_account_id: z.string(),
-    amount: z.number().positive()
+    amount: z.number().positive(),
+    from_pin: z.string().length(6)
   });
 }
