@@ -27,33 +27,13 @@ export class AuthService {
       ]);
     }
 
-    let isAccountExists = true;
-    let accountNumber = "";
-
-    while (isAccountExists) {
-      const randomAccountNumber = Math.floor(
-        10000000 + Math.random() * 90000000
-      ).toString();
-
-      const account = await prisma.account.findUnique({
-        where: {
-          id: randomAccountNumber
-        }
-      });
-
-      if (!account) {
-        isAccountExists = false;
-        accountNumber = randomAccountNumber;
-      }
-    }
-
     const hashedPin = await hash(validatedData.pin, GEN_SALT);
     validatedData.pin = hashedPin;
 
     return await prisma.$transaction(async prisma => {
       const account = await prisma.account.create({
         data: {
-          id: accountNumber,
+          id: validatedData.phone_number,
           full_name: validatedData.full_name,
           phone_number: validatedData.phone_number,
           pin: validatedData.pin
@@ -75,18 +55,6 @@ export class AuthService {
 
       return account;
     });
-  }
-
-  static async checkAccount(phone_number: string): Promise<boolean> {
-    await validate(AuthValidation.CHECK_PHONE_NUMBER, { phone_number });
-
-    const account = await prisma.account.findUnique({
-      where: {
-        phone_number
-      }
-    });
-
-    return !!account;
   }
 
   static async login(data: LoginRequest) {

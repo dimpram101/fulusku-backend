@@ -6,11 +6,7 @@ export class AuthValidation {
     phone_number: z.string(),
     pin: z.string().min(6, " Pin must be at least 6 characters")
   });
-
-  static readonly CHECK_PHONE_NUMBER: ZodType = z.object({
-    phone_number: z.string()
-  });
-
+  
   static readonly LOGIN: ZodType = z.object({
     phone_number: z.string(),
     pin: z.string()
