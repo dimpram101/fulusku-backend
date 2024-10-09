@@ -26,8 +26,9 @@ export class AuthService {
         "phone_number"
       ]);
     }
-
-    const hashedPin = await hash(validatedData.pin, GEN_SALT);
+    
+    const trimmedPin = validatedData.pin.trim();
+    const hashedPin = await hash(trimmedPin, GEN_SALT);
     validatedData.pin = hashedPin;
 
     return await prisma.$transaction(async prisma => {
