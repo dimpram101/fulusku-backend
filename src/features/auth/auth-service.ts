@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt";
+import { compare, hash } from "bcrypt";
 import jwt from "jsonwebtoken";
 import prisma from "../../database";
 import { ErrorResponse } from "../../models";
@@ -47,7 +47,7 @@ export class AuthService {
       }
     }
 
-    const hashedPin = await bcrypt.hash(validatedData.pin, GEN_SALT);
+    const hashedPin = await hash(validatedData.pin, GEN_SALT);
     validatedData.pin = hashedPin;
 
     return await prisma.$transaction(async prisma => {
@@ -102,7 +102,7 @@ export class AuthService {
       throw new ErrorResponse("Account not found", 404, ["phone_number"]);
     }
 
-    const isPinMatch = await bcrypt.compare(validatedData.pin, account!.pin);
+    const isPinMatch = await compare(validatedData.pin, account!.pin);
 
     if (!isPinMatch) {
       throw new ErrorResponse("PIN doesn't match", 400, ["pin"]);
