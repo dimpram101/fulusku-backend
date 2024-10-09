@@ -5,6 +5,6 @@ export class TransactionValidation {
     from_account_id: z.string(),
     to_account_id: z.string(),
     amount: z.number().positive(),
-    from_pin: z.string().length(6)
+    pin: z.string().length(6)
   });
 }

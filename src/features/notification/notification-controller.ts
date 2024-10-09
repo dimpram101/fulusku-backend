@@ -8,11 +8,9 @@ export class NotificationController {
     next: NextFunction
   ) {
     try {
-      // const { id } = req.user!;
-      const { account_id } = req.query;
+      const { id } = req.user!;
       const notifications = await NotificationService.getAllNotifications(
-        // id as string
-        account_id as string
+        id as string
       );
       return res.status(200).json({
         message: "All notifications",

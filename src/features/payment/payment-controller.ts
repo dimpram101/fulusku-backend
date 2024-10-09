@@ -69,10 +69,12 @@ export class PaymentController {
     next: NextFunction
   ) {
     try {
+      const { id } = req.user!;
       const { paymentId } = req.params;
       await PaymentService.updateMemberStatus({
+        ...req.body,
         payment_id: paymentId,
-        ...req.body
+        account_id: id
       });
       return res.status(200).json({
         message: "Member status updated"
