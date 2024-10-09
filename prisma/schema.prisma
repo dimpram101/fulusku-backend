@@ -1,0 +1,132 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id           String @id @unique
+  phone_number String @unique @db.VarChar(15)
+  full_name    String @db.VarChar(255)
+  pin          String
+  balance      Int    @default(0) @db.Int
+
+  created_at    DateTime               @default(now())
+  updated_at    DateTime               @updatedAt
+  from          Transaction[]          @relation("from_account_id")
+  to            Transaction[]          @relation("to_account_id")
+  mutations     Mutation[]
+  payments      PaymentMember[]
+  notifications NotificationReceiver[]
+
+  @@map("accounts")
+}
+
+enum TransactionType {
+  PAYMENT
+  DEPOSIT
+  TRANSFER
+}
+
+enum MutationType {
+  IN
+  OUT
+}
+
+model Mutation {
+  id          Int          @id @default(autoincrement())
+  account     Account      @relation(fields: [account_id], references: [id])
+  account_id  String
+  type        MutationType
+  amount      Int
+  description String
+  created_at  DateTime     @default(now())
+  updated_at  DateTime     @updatedAt
+
+  @@map("mutations")
+}
+
+model Transaction {
+  id              Int      @id @default(autoincrement())
+  from            Account  @relation("from_account_id", fields: [from_account_id], references: [id])
+  from_account_id String
+  to              Account  @relation("to_account_id", fields: [to_account_id], references: [id])
+  to_account_id   String
+  amount          Int
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  @@map("transactions")
+}
+
+enum PaymentStatus {
+  PENDING
+  REJECTED
+  PAID
+}
+
+model Payment {
+  id             Int           @id @default(autoincrement())
+  account_number String
+  amount         Int
+  amount_paid    Int           @default(0)
+  status         PaymentStatus
+  due_date       DateTime
+
+  created_at DateTime        @default(now())
+  updated_at DateTime        @updatedAt
+  members    PaymentMember[]
+
+  @@map("payments")
+}
+
+enum PaymentMemberRole {
+  INITIATOR
+  MEMBER
+}
+
+model PaymentMember {
+  id         Int               @id @default(autoincrement())
+  payment    Payment           @relation(fields: [payment_id], references: [id])
+  payment_id Int
+  account    Account           @relation(fields: [account_id], references: [id])
+  account_id String
+  status     PaymentStatus
+  amount     Int
+  role       PaymentMemberRole
+  created_at DateTime          @default(now())
+  updated_at DateTime          @updatedAt
+
+  @@map("payment_members")
+}
+
+model Notification {
+  id       Int     @id @default(autoincrement())
+  title    String
+  message  String
+  send_all Boolean
+
+  created_at DateTime               @default(now())
+  updated_at DateTime               @updatedAt
+  receivers  NotificationReceiver[]
+
+  @@map("notifications")
+}
+
+model NotificationReceiver {
+  id              Int          @id @default(autoincrement())
+  notification    Notification @relation(fields: [notification_id], references: [id])
+  notification_id Int
+  account         Account      @relation(fields: [account_id], references: [id])
+  account_id      String
+  is_payment      Boolean      @default(false)
+  is_read         Boolean      @default(false)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("notification_receivers")
+}
