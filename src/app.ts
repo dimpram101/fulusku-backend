@@ -6,6 +6,7 @@ import morgan from "morgan";
 import {
   accountRouter,
   authRouter,
+  notificationRouter,
   paymentRouter,
   transactionRouter
 } from "./features";
@@ -25,6 +26,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/account", accountRouter);
 app.use("/api/payment", paymentRouter);
 app.use("/api/transaction", transactionRouter);
+app.use("/api/notifications", notificationRouter);
 
 app.use(ErrorMiddleware.notFound);
 app.use(ErrorMiddleware.returnError);
