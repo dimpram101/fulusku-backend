@@ -24,7 +24,7 @@ export class AccountController {
       res.status(200).json({
         message: `Account ${isAccountExist ? "exists" : "does not exist"}`,
         payload: {
-          exists: isAccountExist
+          account: isAccountExist
         }
       });
     } catch (error) {

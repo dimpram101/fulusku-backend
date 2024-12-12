@@ -34,4 +34,27 @@ export class AuthMiddleware {
       next(error);
     }
   }
+
+  static async checkAccountForRegister(req: Request, _: Response, next: NextFunction) {
+    try {
+      const { phone_number } = req.body;
+
+      const phoneNumberAccount = await prisma.account.findUnique({
+        where: {
+          phone_number
+        }
+      });
+
+      if (phoneNumberAccount) {
+        throw new ErrorResponse("Phone number already registered", 400, [
+          "phone_number"
+        ]);
+      }
+
+      next();
+
+    } catch (error) {
+      next(error);
+    }
+  }
 }

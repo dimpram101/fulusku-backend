@@ -1,3 +1,4 @@
+import { Account } from "@prisma/client";
 import prisma from "../../database";
 import { ErrorResponse } from "../../models";
 import { validate } from "./../../validations/Validation";
@@ -33,7 +34,7 @@ export class AccountService {
     return;
   }
 
-  static async checkAccount(phone_number: string): Promise<boolean> {
+  static async checkAccount(phone_number: string): Promise<Account | null> {
     await validate(AccountValidation.CHECK_PHONE_NUMBER, { phone_number });
 
     const account = await prisma.account.findUnique({
@@ -42,6 +43,6 @@ export class AccountService {
       }
     });
 
-    return !!account;
+    return account;
   }
 }

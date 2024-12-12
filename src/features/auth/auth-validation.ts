@@ -9,6 +9,10 @@ export class AuthValidation {
   
   static readonly LOGIN: ZodType = z.object({
     phone_number: z.string(),
-    pin: z.string()
+  });
+
+  static readonly INSERT_PIN: ZodType = z.object({
+    phone_number: z.string(),
+    pin: z.string().min(6, "Pin must be at least 6 characters")
   });
 }

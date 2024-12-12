@@ -10,6 +10,7 @@ paymentRouter.post(
   "/create/member",
   PaymentController.createPaymentWithMembers
 );
+
 paymentRouter.post(
   "/solo",
   AuthMiddleware.checkPIN,

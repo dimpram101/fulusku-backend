@@ -17,6 +17,7 @@ export class ErrorMiddleware {
     res: Response,
     _next: NextFunction
   ) {
+    console.log(err);
     if (req.file) {
       const file = req.file as Express.Multer.File;
       if (file.path) {

@@ -6,5 +6,9 @@ export interface RegisterRequest {
 
 export interface LoginRequest {
   phone_number: string;
+}
+
+export interface InsertPinRequest {
+  phone_number: string;
   pin: string;
 }

@@ -4,11 +4,11 @@ import { AuthService } from "./auth-service";
 export class AuthController {
   static async register(req: Request, res: Response, next: NextFunction) {
     try {
-      const account = await AuthService.register(req.body);
-      res.status(201).json({
+      const data = await AuthService.register(req.body);
+      return res.status(201).json({
         message: "Account created",
         payload: {
-          account
+          ...data
         }
       });
     } catch (error) {
@@ -18,11 +18,41 @@ export class AuthController {
 
   static async login(req: Request, res: Response, next: NextFunction) {
     try {
-      const token = await AuthService.login(req.body);
-      res.status(200).json({
+      const canInsertPin = await AuthService.checkLogin(req.body);
+      return res.status(200).json({
         message: "Login successful",
         payload: {
-          token
+          canInsertPin
+        }
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async insertPin(req: Request, res: Response, next: NextFunction) {
+    try {
+      const data = await AuthService.insertPin(req.body);
+      return res.status(200).json({
+        message: "Pin inserted",
+        payload: {
+          ...data
+        }
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+  
+  static async getMe(req: Request, res: Response, next: NextFunction) {
+    try {
+      const id = req.user!.id;
+      const data = await AuthService.getMe(id);
+
+      return res.status(200).json({
+        message: "Account found",
+        payload: {
+          ...data
         }
       });
     } catch (error) {

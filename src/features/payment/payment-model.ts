@@ -3,7 +3,6 @@ import { PaymentMemberRole, PaymentStatus } from "@prisma/client";
 export type PaymentSoloRequest = {
   payment_id: string;
   account_id: string;
-  pin: string;
 };
 
 export type CreateDummyPaymentRequest = {

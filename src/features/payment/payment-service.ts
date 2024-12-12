@@ -24,7 +24,7 @@ export class PaymentService {
 
     const payment = await prisma.payment.create({
       data: {
-        id: validatedData.account_number || randomPaymentId(),
+        id: randomPaymentId(),
         amount: validatedData.amount || randomAmount(),
         due_date: tomorrowDueDate
       }

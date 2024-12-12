@@ -7,4 +7,8 @@ export class TransactionValidation {
     amount: z.number().positive(),
     pin: z.string().length(6)
   });
+
+  static readonly TOP_UP: ZodType = z.object({
+    amount: z.number().positive()
+  });
 }

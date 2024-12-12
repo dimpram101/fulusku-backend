@@ -4,7 +4,6 @@ import { ZodType, z } from "zod";
 export class PaymentValidation {
   static readonly PAYMENT_SOLO: ZodType = z.object({
     payment_id: z.string(),
-    pin: z.string(),
     account_id: z.string()
   });
 
