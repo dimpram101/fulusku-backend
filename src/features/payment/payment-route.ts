@@ -16,10 +16,10 @@ paymentRouter.post(
   AuthMiddleware.checkPIN,
   PaymentController.paymentSolo
 );
+paymentRouter.get("/list", PaymentController.getPayments);
 paymentRouter.get("/:paymentId", PaymentController.getPaymentById);
 paymentRouter.post(
   "/member",
-  AuthMiddleware.checkPIN,
   PaymentController.payWithMembers
 );
 paymentRouter.put(

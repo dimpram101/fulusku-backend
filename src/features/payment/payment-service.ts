@@ -33,13 +33,52 @@ export class PaymentService {
     return payment;
   }
 
+  static async getUserPayments(accountId: string) {
+    let payments = await prisma.payment.findMany({
+      where: {
+        members: {
+          some: {
+            account_id: accountId
+          }
+        }
+      },
+      include: {
+        members: true
+      },
+      orderBy: {
+        created_at: "desc"
+      }
+    });
+
+    payments = payments.filter(payment => payment.members.length > 1);
+
+    let canPay: boolean | null = payments.length ? true : null;
+
+    if (payments.length) {
+      canPay = payments.every(payment =>
+        payment.members.every(
+          member => member.status === PaymentStatus.ACCEPTED
+        )
+      );
+    }
+
+    return {
+      payments,
+      canPay
+    };
+  }
+
   static async getPaymentById(paymentId: string) {
     const payment = await prisma.payment.findUnique({
       where: {
         id: paymentId
       },
       include: {
-        members: true
+        members: {
+          include: {
+            account: true
+          }
+        }
       }
     });
 
@@ -49,7 +88,6 @@ export class PaymentService {
         member => member.status === PaymentStatus.ACCEPTED
       );
     }
-
     const payload = {
       payment,
       canPay

@@ -93,7 +93,6 @@ export class AuthService {
         phone_number: validatedData.phone_number
       }
     });
-    console.log(account);
     if (!account) {
       throw new ErrorResponse("Account not found", 404, ["phone_number"]);
     }

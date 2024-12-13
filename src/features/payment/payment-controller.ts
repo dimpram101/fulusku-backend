@@ -21,6 +21,22 @@ export class PaymentController {
     }
   }
 
+  static async getPayments(req: Request, res: Response, next: NextFunction) {
+    try {
+      const payments = await PaymentService.getUserPayments(req.user!.id);
+      
+      return res.status(200).json({
+        success: true,
+        message: "Payments found",
+        payload: {
+          ...payments
+        }
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
   static async getPaymentById(req: Request, res: Response, next: NextFunction) {
     try {
       const payment = await PaymentService.getPaymentById(req.params.paymentId);

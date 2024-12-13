@@ -15,8 +15,6 @@ export class NotificationService {
       }
     });
 
-    console.log(accountId);
-
     return notifications;
   }
 }
