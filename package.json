@@ -7,8 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon --watch src --exec ts-node src/index.ts",
     "build": "tsc",
-    "prs": "prisma generate",
-    "start": "prisma generate && tsc && node dist/index.js"
+    "start": "tsc && node dist/index.js"
   },
   "prisma": {
     "seed": "ts-node ./src/database/seed.ts"
