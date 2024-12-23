@@ -12,6 +12,7 @@ export class NotificationController {
       const notifications = await NotificationService.getAllNotifications(
         id as string
       );
+      console.log(notifications);
       return res.status(200).json({
         message: "All notifications",
         payload: {

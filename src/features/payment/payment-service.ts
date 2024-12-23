@@ -259,6 +259,17 @@ export class PaymentService {
         status: validatedData.status
       }
     });
+
+    if (validatedData.status === PaymentStatus.REJECTED) {
+      await prisma.payment.update({
+        where: {
+          id: validatedData.payment_id
+        },
+        data: {
+          status: PaymentStatus.REJECTED
+        }
+      });
+    }
   }
 
   static async payWithMembers(paymentId: string) {
